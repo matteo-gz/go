@@ -1,6 +1,6 @@
 ## slice
 
-> https://github.com/matteo-gz/go/blob/note/1.19/src/runtime/slice.go
+> [src/runtime/slice.go](https://github.com/matteo-gz/go/blob/note/1.19/src/runtime/slice.go)
 
 ```go
 type slice struct {

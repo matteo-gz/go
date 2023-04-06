@@ -196,7 +196,23 @@ func growslice(et *_type, old slice, cap int) slice {
 		// We assume that append doesn't need to preserve old.array in this case.
 		return slice{unsafe.Pointer(&zerobase), old.len, cap}
 	}
+	// 扩容地方
+	/*
+				首先，假设当前 slice 的容量为 old.cap，将其赋值给新的容量 newcap。
+				然后，计算新的容量 doublecap，其值为当前容量的两倍。
 
+				如果期望的新容量 cap 大于 doublecap，那么将新容量设置为期望的新容量 cap。
+
+				否则，判断当前 slice 的容量是否小于 threshold（256）。如果小于 threshold，那么将新容量设置为 doublecap。
+
+				如果当前 slice 的容量不小于 threshold，则进入循环，逐步增加新的容量大小，直到其值大于等于期望的新容量 cap 或者出现整数溢出。
+			具体来说，循环中的每一次迭代都会将 newcap 增加 newcap + 3*threshold / 4 的值，其中 threshold 为上文提到的 256。
+			这个增长速率会随着 newcap 的增大而逐渐减小，最终会趋于一个稳定的增长速率。
+				如果循环结束后 newcap 仍然小于等于 0，那么将新容量设置为期望的新容量 cap。
+
+				需要注意的是，这段代码中的算法主要是为了平衡 slice 扩容的时间和空间效率，
+		以及减少分配新内存的次数。算法中的细节还与 slice 的当前容量大小、期望的新容量大小等因素有关。
+	*/
 	newcap := old.cap
 	doublecap := newcap + newcap
 	if cap > doublecap {
@@ -221,6 +237,8 @@ func growslice(et *_type, old slice, cap int) slice {
 			}
 		}
 	}
+
+	// 内存对齐
 
 	var overflow bool
 	var lenmem, newlenmem, capmem uintptr

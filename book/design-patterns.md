@@ -2,7 +2,7 @@
 
 - 责任链模式
 - 熔断模式
-- <a href="#section-3">函数选项模式</a>
+- [函数选项模式](#functionOpt)
 
 ## 责任链模式
 
@@ -190,7 +190,7 @@ func main() {
 
 ```
 
-## function option {#section-3}
+## function option <a id='functionOpt'></a>
 
 > book/designPatterns/funcopt/funcopt.go
 

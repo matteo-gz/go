@@ -190,7 +190,9 @@ func main() {
 
 ```
 
-## function option <a id='functionOpt'></a>
+## function option 
+
+<a id="functionOpt"></a>
 
 > book/designPatterns/funcopt/funcopt.go
 

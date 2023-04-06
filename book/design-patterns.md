@@ -1,7 +1,7 @@
 ## 设计模式
 
-- 责任链模式
-- 熔断模式
+- [责任链模式](#责任链模式)
+- [熔断模式](#CircuitBreakerPattern)
 - [函数选项模式](#functionOpt)
 
 ## 责任链模式
@@ -94,6 +94,7 @@ func main() {
 ```
 
 ##  熔断模式
+<a id="CircuitBreakerPattern"></a>
 
 > book/designPatterns/hystrix/hystrix.go
 

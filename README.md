@@ -5,6 +5,7 @@
 [make与new区别](./book/make.md)
 
 [slice](./book/slice.md)
+[map](./book/map.md)
 
 [设计模式](./book/design-patterns.md)
 

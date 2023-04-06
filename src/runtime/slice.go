@@ -238,7 +238,7 @@ func growslice(et *_type, old slice, cap int) slice {
 		}
 	}
 
-	// 内存对齐
+	// 内存对齐 再次调整newcap的赋值
 
 	var overflow bool
 	var lenmem, newlenmem, capmem uintptr

@@ -1,7 +1,7 @@
 
 ### 关键字 make vs new
 
-> src/builtin/builtin.go 
+> https://github.com/matteo-gz/go/blob/note/1.19/src/builtin/builtin.go 
 
 #### make 
 

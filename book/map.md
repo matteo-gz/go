@@ -9,7 +9,7 @@ type hmap struct {
 // 确保这个定义与编译器的定义保持同步。
 count     int   // 存储在 map 中的键值对数量。必须是第一个字段（用于内置函数 len()）
 flags     uint8 // 表示 map 的状态标志，包括了迭代器是否在使用中、是否正在进行扩容等信息。
-B         uint8 // 存储桶的数量的对数，实际桶的数量为 2^B。 bucketShift bucket的位移值
+B         uint8 // 存储桶的数量的对数，实际桶的数量为len(buckets) == 2^B(bucketShift bucket的位移值)。 
 noverflow uint16 // 溢出桶数量的估计值。 number of overflows
 hash0     uint32 // 哈希种子。
 
@@ -42,12 +42,22 @@ nextOverflow *bmap
 ```go
 // Go map 的 bucket。 bmap equal bucket map
 type bmap struct {
-// tophash 通常包含此 bucket 中每个 key 的 hash 值的高字节。
+// tophash 通常包含此 bucket 中每个 key 的 hash 值的高字节。 存储了键的哈希的高 8 位
 // 如果 tophash[0] < minTopHash，则 tophash[0] 是一个 bucket 撤离状态。
 tophash [bucketCnt]uint8 // bucketCnt equal bucket count
 // 接下来是 bucketCnt 个 key，然后是 bucketCnt 个 elem。
 // 注意：将所有 key 放在一起，然后将所有 elem 放在一起比交替 key/elem/key/elem/... 代码更复杂，但可以消除需要填充的情况，例如 map[int64]int8。
 // 最后是一个溢出指针。
+}
+
+src/cmd/compile/internal/reflectdata/reflect.go::MapBucketType
+
+type bmap struct {
+topbits  [8]uint8
+keys     [8]keytype
+values   [8]valuetype
+pad      uintptr
+overflow uintptr
 }
 ```
 ```uml
@@ -167,13 +177,74 @@ flags uint32      // map 的标志位
 
 ```
 
+## hash冲突解决
+
+### 开放寻址法
+
+数组中元素的数量与数组大小的比值
+
+loadFactor =  100% 变成  𝑂(𝑛)
+
+### 拉链法 
+
+大多数语言实现,golang
+
+装载因子:=元素数量÷桶数量
+
+
+
 ## 创建map
+
+
+
+```go
+hash := map[string]int{
+	"1": 2,
+	"3": 4,
+	"5": 6,
+}
+```
+> src/cmd/compile/internal/walk/complit.go
+> 
+> func maplit(n *ir.CompLitExpr, m ir.Node, init *ir.Nodes) 
+
+ 将一个复合字面量（composite literal）转换为一个 map 类型的变量。
+
+函数首先创建一个 map 类型的变量，并将其分配给传入的 m 变量。然后，它遍历复合字面量中的键值对，并将它们插入到 map 中。
+
+如果复合字面量中的键值对数量较小，则直接将其插入到 map 中。否则，函数会将键和值分别放入两个静态的数组中，并使用循环将其逐个插入到 map 中。这样可以避免在大型 map 中进行过多的内存分配和复制操作。
+
+该函数的实现比较复杂，包含了许多与类型检查、变量赋值、静态数组初始化、循环等相关的操作。
+
 
 `func makemap(t *maptype, hint int, h *hmap) *hmap `
 
 ##  查找map
-`mapaccess1`
+
+```go
+v     := hash[key] // => v     := *mapaccess1(maptype, hash, &key)
+v, ok := hash[key] // => v, ok := mapaccess2(maptype, hash, &key)
+```
+> src/cmd/compile/internal/walk/expr.go
+> 
+> walkExpr
+```go
+case ir.OINDEXMAP:
+n := n.(*ir.IndexExpr)
+return walkIndexMap(n, init) // `mapaccess1` src/runtime/map.go
+
+// a,b = m[i]
+case ir.OAS2MAPR:
+n := n.(*ir.AssignListStmt)
+return walkAssignMapRead(init, n) // `mapaccess2` src/runtime/map.go
+```
+
+
 
 > ref: https://github.com/cch123/golang-notes/blob/master/map.md
 > 
 > https://golang.design/go-questions/map/principal/
+> 
+> https://draveness.me/golang/docs/part2-foundation/ch03-datastructure/golang-hashmap/
+> 
+> https://www.bilibili.com/video/BV1Sp4y1U7dJ/

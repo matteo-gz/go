@@ -69,6 +69,7 @@ package runtime
 // 当增长表格时，迭代器仍然通过旧表进行迭代，
 // 如果他们正在迭代的桶已经被迁移到新表中，则必须检查新表。
 //
+// loadFactor 负载因子 = count 元素数量/ 桶数量
 // 选取负载因子：过大会有大量的溢出桶，过小则会浪费大量的空间。
 // 我编写了一个简单的程序来检查不同负载的一些统计信息（64 位、8 字节的键和元素）：
 //  loadFactor    %overflow  bytes/entry     hitprobe    missprobe
@@ -338,6 +339,7 @@ func makemap_small() *hmap {
 // If h != nil, the map can be created directly in h.
 // If h.buckets != nil, bucket pointed to can be used as the first bucket.
 func makemap(t *maptype, hint int, h *hmap) *hmap {
+	//计算哈希占用的内存是否溢出或者超出能分配的最大值
 	mem, overflow := math.MulUintptr(uintptr(hint), t.bucket.size)
 	if overflow || mem > maxAlloc {
 		hint = 0
@@ -347,8 +349,10 @@ func makemap(t *maptype, hint int, h *hmap) *hmap {
 	if h == nil {
 		h = new(hmap)
 	}
+	// 获取一个随机的哈希种子
 	h.hash0 = fastrand()
 
+	// 根据传入的 hint 计算出需要的最小需要的桶的数量
 	// Find the size parameter B which will hold the requested # of elements.
 	// For hint < 0 overLoadFactor returns false since hint < bucketCnt.
 	B := uint8(0)
@@ -362,6 +366,7 @@ func makemap(t *maptype, hint int, h *hmap) *hmap {
 	// If hint is large zeroing this memory could take a while.
 	if h.B != 0 {
 		var nextOverflow *bmap
+		// 创建用于保存桶的数组
 		h.buckets, nextOverflow = makeBucketArray(t, h.B, nil)
 		if nextOverflow != nil {
 			h.extra = new(mapextra)
@@ -372,6 +377,18 @@ func makemap(t *maptype, hint int, h *hmap) *hmap {
 	return h
 }
 
+/*
+makeBucketArray 函数用于为 map 类型的桶分配一个后备数组，并根据需要分配溢出桶。该函数接受三个参数：t 表示 map 类型的元数据，b 表示需要分配的桶数量的最小值（这个值可能会被自动调整），dirtyalloc 表示一个之前已经分配的桶数组（可选）。
+
+函数首先根据桶数量 b 计算桶基数，并计算出最终需要分配的桶数量 nbuckets。如果 b 比较大，则会根据 b 的大小估计溢出桶的数量，并将其加入到 nbuckets 中。然后，函数会计算需要分配的字节数，并将其对齐到桶的大小的倍数。
+
+接下来，根据参数 dirtyalloc 是否为空，函数会决定是创建一个新的桶数组还是重用之前已经分配的数组。如果使用的是之前的数组，则需要将数组清空，并将 nbuckets 重新计算，以确保其与之前计算的值一致。
+
+最后，如果预分配了溢出桶，则将它们的溢出指针设置为后备数组的起始位置，以便在需要时使用。函数将分配好的桶数组指针和下一个溢出桶的指针作为返回值返回。
+
+makeBucketArray 函数是 Go 语言中实现 map 数据结构的内部函数之一，用于支持 map 类型的键值对的存储和查找。函数的主要作用是为 map 分配足够的存储空间，并根据需要分配溢出桶。
+*/
+
 // makeBucketArray initializes a backing array for map buckets.
 // 1<<b is the minimum number of buckets to allocate.
 // dirtyalloc should either be nil or a bucket array previously
@@ -379,6 +396,7 @@ func makemap(t *maptype, hint int, h *hmap) *hmap {
 // If dirtyalloc is nil a new backing array will be alloced and
 // otherwise dirtyalloc will be cleared and reused as backing array.
 func makeBucketArray(t *maptype, b uint8, dirtyalloc unsafe.Pointer) (buckets unsafe.Pointer, nextOverflow *bmap) {
+	// 会根据传入的 B 计算出的需要创建的桶数量并在内存中分配一片连续的空间用于存储数据
 	base := bucketShift(b)
 	nbuckets := base
 	// For small b, overflow buckets are unlikely.

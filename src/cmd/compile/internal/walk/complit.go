@@ -431,7 +431,7 @@ func maplit(n *ir.CompLitExpr, m ir.Node, init *ir.Nodes) {
 			base.Fatalf("maplit: entry is not a literal: %v", r)
 		}
 	}
-
+	// 分支
 	if len(entries) > 25 {
 		// For a large number of entries, put them in an array and loop.
 

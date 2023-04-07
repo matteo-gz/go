@@ -1,0 +1,61 @@
+
+    <option name="groups">
+      <GroupState>
+        <option name="bookmarks">
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/slice.go" />
+              <entry key="line" value="14" />
+            </attributes>
+            <option name="description" value="type slice" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+        </option>
+        <option name="name" value="slice" />
+      </GroupState>
+      <GroupState>
+        <option name="bookmarks">
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/map.go" />
+              <entry key="line" value="186" />
+            </attributes>
+            <option name="description" value="type bmap" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/map.go" />
+              <entry key="line" value="169" />
+            </attributes>
+            <option name="description" value="type mapextra" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/map.go" />
+              <entry key="line" value="152" />
+            </attributes>
+            <option name="description" value="type hmap" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/map.go" />
+            </attributes>
+            <option name="description" value="" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/map.go" />
+              <entry key="line" value="448" />
+            </attributes>
+            <option name="description" value="func mapaccess1" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+        </option>
+        <option name="name" value="map" />
+      </GroupState>
+    </option>
+  

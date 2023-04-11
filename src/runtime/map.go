@@ -663,6 +663,7 @@ func mapassign(t *maptype, h *hmap, key unsafe.Pointer) unsafe.Pointer {
 again:
 	bucket := hash & bucketMask(h.B)
 	if h.growing() {
+		// 扩容的数据迁移
 		growWork(t, h, bucket)
 	}
 	b := (*bmap)(add(h.buckets, bucket*uintptr(t.bucketsize)))
@@ -708,9 +709,12 @@ bucketloop:
 
 	// Did not find mapping for key. Allocate new cell & add entry.
 
+	// 未在增长中 才可以开始增长
+
 	// If we hit the max load factor or we have too many overflow buckets,
 	// and we're not already in the middle of growing, start growing.
 	if !h.growing() && (overLoadFactor(h.count+1, h.B) || tooManyOverflowBuckets(h.noverflow, h.B)) {
+		// 扩容入口
 		hashGrow(t, h)
 		goto again // Growing the table invalidates everything, so try again
 	}
@@ -949,6 +953,7 @@ next:
 			// bucket and only return the ones that will be migrated to this bucket.
 			oldbucket := bucket & it.h.oldbucketmask()
 			b = (*bmap)(add(h.oldbuckets, oldbucket*uintptr(t.bucketsize)))
+			// 数据迁移过程
 			if !evacuated(b) {
 				checkBucket = bucket
 			} else {
@@ -1104,6 +1109,10 @@ func hashGrow(t *maptype, h *hmap) {
 		h.flags |= sameSizeGrow
 	}
 	oldbuckets := h.buckets
+
+	// 创建一组新桶和预创建的溢出桶，
+	//随后将原有的桶数组设置到 oldbuckets 上并将新的空桶设置到 buckets 上，
+	//溢出桶也使用了相同的逻辑更新
 	newbuckets, nextOverflow := makeBucketArray(t, h.B+bigger, nil)
 
 	flags := h.flags &^ (iterator | oldIterator)
@@ -1162,6 +1171,7 @@ func (h *hmap) growing() bool {
 	return h.oldbuckets != nil
 }
 
+// 等量扩容
 // sameSizeGrow reports whether the current growth is to a map of the same size.
 func (h *hmap) sameSizeGrow() bool {
 	return h.flags&sameSizeGrow != 0
@@ -1182,12 +1192,24 @@ func (h *hmap) oldbucketmask() uintptr {
 }
 
 func growWork(t *maptype, h *hmap, bucket uintptr) {
+	//在 growWork 函数中，第一次调用 evacuate 函数
+	//是为了确保将要使用的桶对应的旧桶中的键值对都已经被搬移到新桶中，
+	//以避免在对该桶进行插入、查找等操作时，访问到旧桶中的键值对，导致数据不一致或者访问错误。
+
 	// make sure we evacuate the oldbucket corresponding
 	// to the bucket we're about to use
 	evacuate(t, h, bucket&h.oldbucketmask())
 
 	// evacuate one more oldbucket to make progress on growing
 	if h.growing() {
+		// 而第二次调用 evacuate 函数是为了使哈希表的扩容进程更快地进行，
+		//即一次搬移两个旧桶的键值对，以加速哈希表的迁移过程。
+		//具体来说，h.nevacuate 表示当前需要搬移的旧桶的索引，
+		//这个索引会在每次搬移完成后递增。如果当前 map 正在扩容中，
+		//那么第二次调用 evacuate 函数就会搬移
+		//h.nevacuate 和 h.nevacuate + 1 两个旧桶中的键值对。
+		//这样做可以保证在 map 中有大量键值对需要搬移时，
+		//能够更快地完成扩容操作，以减少对性能的影响。
 		evacuate(t, h, h.nevacuate)
 	}
 }
@@ -1212,22 +1234,29 @@ func evacuate(t *maptype, h *hmap, oldbucket uintptr) {
 		// TODO: reuse overflow buckets instead of using new ones, if there
 		// is no iterator using the old buckets.  (If !oldIterator.)
 
+		// 会将一个旧桶中的数据分流到两个新桶，所以它会创建两个用于保存分配上下文的
+		// runtime.evacDst 结构体，这两个结构体分别指向了一个新桶
+
 		// xy contains the x and y (low and high) evacuation destinations.
 		var xy [2]evacDst
 		x := &xy[0]
+		// 当哈希表的容量不变（即等量扩容）时，只会将一个旧桶中的元素分流到一个新桶中，因此只需要计算一个新桶的位置
 		x.b = (*bmap)(add(h.buckets, oldbucket*uintptr(t.bucketsize)))
 		x.k = add(unsafe.Pointer(x.b), dataOffset)
 		x.e = add(x.k, bucketCnt*uintptr(t.keysize))
 
+		// 如果这是等量扩容，那么旧桶与新桶之间是一对一的关系，所以两个 runtime.evacDst
+		//只会初始化一个
 		if !h.sameSizeGrow() {
 			// Only calculate y pointers if we're growing bigger.
 			// Otherwise GC can see bad pointers.
 			y := &xy[1]
+			// 当哈希表的容量翻倍时，每个旧桶中的元素会都分流到新创建的两个桶中，因此需要计算两个新桶的位置
 			y.b = (*bmap)(add(h.buckets, (oldbucket+newbit)*uintptr(t.bucketsize)))
 			y.k = add(unsafe.Pointer(y.b), dataOffset)
 			y.e = add(y.k, bucketCnt*uintptr(t.keysize))
 		}
-
+		// 而当哈希表的容量翻倍时，每个旧桶的元素会都分流到新创建的两个桶中
 		for ; b != nil; b = b.overflow(t) {
 			k := add(unsafe.Pointer(b), dataOffset)
 			e := add(k, bucketCnt*uintptr(t.keysize))
@@ -1250,6 +1279,13 @@ func evacuate(t *maptype, h *hmap, oldbucket uintptr) {
 					// to send this key/elem to bucket x or bucket y).
 					hash := t.hasher(k2, uintptr(h.hash0))
 					if h.flags&iterator != 0 && !t.reflexivekey() && !t.key.equal(k2, k2) {
+
+						// 如果 key != key（即 NaN），那么哈希值可能会（并且很可能会）与旧哈希值完全不同。此外，
+						// 它是不可重现的。在迭代器存在的情况下需要重现性，因为我们的搬迁决策必须与迭代器的决策匹配。
+						// 幸运的是，我们可以任意地发送这些键。而且，tophash 对于这些类型的键没有意义。
+						// 我们让 tophash 的最低位驱动搬迁决策。我们为下一级重新计算一个新的随机 tophash，
+						// 以便这些键在多次扩容后能够均匀地分布在所有桶中。
+
 						// If key != key (NaNs), then the hash could be (and probably
 						// will be) entirely different from the old hash. Moreover,
 						// it isn't reproducible. Reproducibility is required in the
@@ -1275,7 +1311,8 @@ func evacuate(t *maptype, h *hmap, oldbucket uintptr) {
 				}
 
 				b.tophash[i] = evacuatedX + useY // evacuatedX + 1 == evacuatedY
-				dst := &xy[useY]                 // evacuation destination
+				// 目标
+				dst := &xy[useY] // evacuation destination
 
 				if dst.i == bucketCnt {
 					dst.b = h.newoverflow(t, dst.b)
@@ -1315,6 +1352,7 @@ func evacuate(t *maptype, h *hmap, oldbucket uintptr) {
 	}
 
 	if oldbucket == h.nevacuate {
+		// 更新 map 中正在搬移的旧桶的索引
 		advanceEvacuationMark(h, t, newbit)
 	}
 }
@@ -1331,6 +1369,7 @@ func advanceEvacuationMark(h *hmap, t *maptype, newbit uintptr) {
 		h.nevacuate++
 	}
 	if h.nevacuate == newbit { // newbit == # of oldbuckets
+		// 清空旧的
 		// Growing is all done. Free old main bucket array.
 		h.oldbuckets = nil
 		// Can discard old overflow buckets as well.
@@ -1339,7 +1378,37 @@ func advanceEvacuationMark(h *hmap, t *maptype, newbit uintptr) {
 		if h.extra != nil {
 			h.extra.oldoverflow = nil
 		}
+		// h.flags中的 sameSizeGrow 标志位清除（设置为 0）
 		h.flags &^= sameSizeGrow
+		/*
+				类似linux中的权限设计
+
+				假设 h.flags 的二进制表示为 11100100，sameSizeGrow 的值为 00000100，
+				那么 h.flags &^= sameSizeGrow 的操作过程如下：
+
+				h.flags        = 11100100
+				sameSizeGrow   = 00000100
+
+				h.flags &^= sameSizeGrow
+				               ^^^^^^^^
+				               00000100
+
+				将 sameSizeGrow 取反，得到 11111011
+
+				h.flags        = 11100100
+				sameSizeGrow   = 00000100
+				sameSizeGrow'  = 11111011
+
+				将 h.flags 和 sameSizeGrow' 进行按位与操作，得到结果 11100000
+
+				h.flags & sameSizeGrow' = 11100100
+				                      & 11111011
+				                      = 11100000
+
+				将结果赋值给 h.flags，得到最终结果 h.flags = 11100000
+				因此，h.flags &^= sameSizeGrow 的结果就是将哈希表 h 中的 sameSizeGrow 标志位清除，
+			也就是将二进制数中 sameSizeGrow 对应的位置从 1 变为 0。
+		*/
 	}
 }
 

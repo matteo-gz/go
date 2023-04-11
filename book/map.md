@@ -261,13 +261,33 @@ case ir.OAS2MAPR:
 n := n.(*ir.AssignListStmt)
 return walkAssignMapRead(init, n) // `mapaccess2` src/runtime/map.go
 ```
+用于选择桶序号的是哈希的最低几位，而用于加速访问的是哈希的高 8 位，这种设计能够减少同一个桶中有大量相等 tophash 的概率影响性能
 
 ## 写入
 
 `mapassign`
 
+## 删除
+`mapdelete`
+
 ## 扩容
-渐进式扩容 避免瞬时性能抖动
+in `mapassign`
+
+渐进式扩容,避免瞬时性能抖动,扩容过程不是原子的
+
+条件
+- 装载因子已经超过 6.5
+- 哈希使用了太多溢出桶 ｜ 等量扩容 sameSizeGrow
+
+```go
+// evacDst 是一个搬移目标位置的结构体。
+type evacDst struct {
+    b *bmap          //bucket 当前搬移目标桶的指针。
+    i int            //index 当前需要搬移的键值对在 b 桶中的下标。
+    k unsafe.Pointer //key 当前需要搬移的键的内存地址。
+    e unsafe.Pointer //elem 当前需要搬移的值的内存地址。
+}
+```
 
 > ref: https://github.com/cch123/golang-notes/blob/master/map.md
 > 

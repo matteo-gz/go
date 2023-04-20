@@ -268,23 +268,30 @@ func panicmemAddr(addr uintptr) {
 // Create a new deferred function fn, which has no arguments and results.
 // The compiler turns a defer statement into a call to this.
 func deferproc(fn func()) {
+	// 获取当前协程（goroutine）的信息，以便将延迟函数添加到其 defer 链表中。
 	gp := getg()
 	if gp.m.curg != gp {
 		// go code on the system stack can't defer
 		throw("defer on system stack")
+		//检查当前协程是否在系统栈上运行。
+		//如果是，抛出一个异常，因为系统栈上的 Go 代码不能使用 defer。
 	}
 
+	//创建一个新的延迟结构体，并将其链接到当前协程的 defer 链表中。
 	d := newdefer()
 	if d._panic != nil {
 		throw("deferproc: d.panic != nil after newdefer")
 	}
 	d.link = gp._defer
 	gp._defer = d
+	//将延迟函数作为参数赋值给新创建的延迟结构体。
 	d.fn = fn
+	//获取当前函数的返回地址，并将其保存到延迟结构体的 pc 字段中。
 	d.pc = getcallerpc()
 	// We must not be preempted between calling getcallersp and
 	// storing it to d.sp because getcallersp's result is a
 	// uintptr stack pointer.
+	//获取当前栈帧的栈指针，并将其保存到延迟结构体的 sp 字段中。
 	d.sp = getcallersp()
 
 	// deferproc returns 0 normally.
@@ -293,6 +300,7 @@ func deferproc(fn func()) {
 	// the code the compiler generates always
 	// checks the return value and jumps to the
 	// end of the function if deferproc returns != 0.
+	//最后，返回一个值表示函数执行的状态，以便调用者可以根据其返回值来决定是否需要跳过后续的代码。
 	return0()
 	// No code can go here - the C return register has
 	// been set and must not be clobbered.

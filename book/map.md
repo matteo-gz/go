@@ -1,5 +1,16 @@
 ## map
 
+参考资料:
+>  [cch123/golang map](https://github.com/cch123/golang-notes/blob/master/map.md)
+>
+> [go questions/map](https://golang.design/go-questions/map/principal/)
+>
+> [draveness/map](https://draveness.me/golang/docs/part2-foundation/ch03-datastructure/golang-hashmap/)
+>
+> video [KylinLabs/Map长啥样儿](https://www.bilibili.com/video/BV1Sp4y1U7dJ/)
+
+
+
 > src/runtime/map.go
 
 ```go
@@ -279,6 +290,8 @@ in `mapassign`
 - 装载因子已经超过 6.5
 - 哈希使用了太多溢出桶 ｜ 等量扩容 sameSizeGrow
 
+平衡插入和查询性能
+
 ```go
 // evacDst 是一个搬移目标位置的结构体。
 type evacDst struct {
@@ -289,10 +302,40 @@ type evacDst struct {
 }
 ```
 
-> ref: https://github.com/cch123/golang-notes/blob/master/map.md
-> 
-> https://golang.design/go-questions/map/principal/
-> 
-> https://draveness.me/golang/docs/part2-foundation/ch03-datastructure/golang-hashmap/
-> 
-> https://www.bilibili.com/video/BV1Sp4y1U7dJ/
+## 对比
+
+在 Go 中，map 是一种引用类型，不能直接比较是否相等。因为两个 map 变量即使有相同的键值对，它们在内存中的地址也是不同的，所以使用 == 运算符比较两个 map 变量时，结果永远都是 false。
+
+如果你需要比较两个 map 是否拥有相同的键值对，可以使用以下方法：
+
+逐个比较键值对。使用 range 关键字遍历每个 map 中的键值对，依次比较两个 map 中相同键所对应的值是否相同。如果遍历过程中有任何一个键值对不相同，则说明两个 map 不同。这种方法适用于 map 中的值是可以比较的类型（如 int、string、bool 等）。
+
+```go
+
+func IsSameMap(m1, m2 map[string]int) bool {
+if len(m1) != len(m2) {
+return false
+}
+for k, v1 := range m1 {
+v2, ok := m2[k]
+if !ok || v1 != v2 {
+return false
+}
+}
+return true
+}
+```
+
+使用 reflect 包中的 DeepEqual 函数。DeepEqual 函数可以比较两个值是否深度相等，包括比较 map 中的键值对。这种方法可以适用于 map 中的值是任意类型，但是比较时需要进行类型转换，性能也相对较低。
+
+```go
+import "reflect"
+
+func IsSameMap(m1, m2 map[string]interface{}) bool {
+return reflect.DeepEqual(m1, m2)
+}
+```
+
+
+需要注意的是，对于方法1来说，两个 map 中键的顺序不同也会被视为不同的 map。而对于方法2来说，如果两个 map 中键的顺序不同但是键值对相同，它们会被视为相同的 map。
+

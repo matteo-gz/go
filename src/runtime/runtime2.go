@@ -335,6 +335,11 @@ type gobuf struct {
 	bp   uintptr // for framepointer-enabled architectures
 }
 
+// select-unicast-data-structure node
+// 是用于支持Go语言中select语句的一种数据结构。
+//sudog结构体存储了一个channel的信息以及相关的goroutine等待信息，
+//用于实现在channel上的阻塞操作和通信
+
 // sudog represents a g in a wait list, such as for sending/receiving
 // on a channel.
 //
@@ -518,9 +523,9 @@ const (
 
 // Values for m.freeWait.
 const (
-	freeMStack = 0  // M done, free stack and reference.
-	freeMRef   = 1  // M done, free reference.
-	freeMWait  = 2  // M still in use.
+	freeMStack = 0 // M done, free stack and reference.
+	freeMRef   = 1 // M done, free reference.
+	freeMWait  = 2 // M still in use.
 )
 
 type m struct {
@@ -552,7 +557,7 @@ type m struct {
 	blocked       bool // m is blocked on a note
 	newSigstack   bool // minit on C thread called sigaltstack
 	printlock     int8
-	incgo         bool   // m is executing a cgo call
+	incgo         bool          // m is executing a cgo call
 	freeWait      atomic.Uint32 // Whether it is safe to free g0 and delete m (one of freeMRef, freeMStack, freeMWait)
 	fastrand      uint64
 	needextram    bool

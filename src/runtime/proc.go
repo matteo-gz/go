@@ -4236,6 +4236,7 @@ func saveAncestors(callergp *g) *[]ancestorInfo {
 	return ancestorsp
 }
 
+// 放入g自由列表,如果本地的g列表太长，将批量的转移至全局列表中
 // Put on gfree list.
 // If local list is too long, transfer a batch to the global list.
 func gfput(_p_ *p, gp *g) {
@@ -5011,6 +5012,7 @@ func incidlelocked(v int32) {
 	unlock(&sched.lock)
 }
 
+// 死锁检查
 // Check for deadlock situation.
 // The check is based on number of running M's, if 0 -> deadlock.
 // sched.lock must be held.

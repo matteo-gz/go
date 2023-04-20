@@ -1548,6 +1548,7 @@ func gcSweep(mode gcMode) {
 func gcResetMarkState() {
 	// This may be called during a concurrent phase, so lock to make sure
 	// allgs doesn't change.
+	// gc
 	forEachG(func(gp *g) {
 		gp.gcscandone = false // set to true in gcphasework
 		gp.gcAssistBytes = 0

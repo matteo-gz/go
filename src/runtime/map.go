@@ -742,6 +742,7 @@ bucketloop:
 	h.count++
 
 done:
+	// 写标志 panic
 	if h.flags&hashWriting == 0 {
 		fatal("concurrent map writes")
 	}

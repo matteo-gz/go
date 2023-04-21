@@ -1,8 +1,9 @@
 参考文章
 
-[Golang 之变量去哪儿](https://qcrao.com/post/where-go-variables-go/)
+
 
 ## 逃逸分析
+[Golang 之变量去哪儿](https://qcrao.com/post/where-go-variables-go/)
 
 逃逸分析（Escape Analysis）是指编译器在编译时分析程序中的变量在函数调用栈中的生命周期，进而确定变量应该存储在栈上还是堆上的过程。
 
@@ -34,6 +35,16 @@
 如果一个变量的生命周期不会逃逸到函数外部，那么可以将其分配在栈上，否则必须分配在堆上。
 函数外部的变量总是在堆上分配。
 
+## 内存布局
+[图解 Go 语言内存分配](https://qcrao.com/post/graphic-go-memory-allocation/)
+
+内存多级管理,降低锁粒度
+
+线程内存池,全局内存池
+
+> src/runtime/malloc.go
+
+起源是tcmalloc
 
 ### TLS变量
 

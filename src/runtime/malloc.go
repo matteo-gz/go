@@ -2,6 +2,68 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+// 内存分配器。
+//
+// 这最初是基于tcmalloc的,但已经与之相去甚远。
+// http://goog-perftools.sourceforge.net/doc/tcmalloc.html
+// 主分配器以页(page)为单位运行。
+// 小的分配尺寸(高达32kB)四舍五入到约70个大小类之一,
+// 每个大小类都有完全相同大小的自由对象集。
+// 任何自由页内存都可以划分为一组指定大小类的对象,
+// 然后使用自由位图管理。
+//
+// 分配器的数据结构是:
+//
+// fixalloc: 用于管理分配器所用存储的固定大小的堆外对象的自由列表分配器。
+// mheap: 由mheap以页(8192字节)为粒度管理的内存分配堆。
+// mspan: mheap管理的使用中页面的运行。
+// mcentral: 收集给定大小类的所有span。
+// mcache: 每个P缓存有可用空间的mspan。
+// mstats: 分配统计信息。
+//
+// 分配一个小对象要遍历一系列缓存:
+//
+// 1. 将大小四舍五入到小大小类之一,并在此P的mcache中查找对应的mspan。
+//    扫描mspan的自由位图以查找自由插槽。
+//    如果有可用插槽,分配它。
+//    所有这些都可以在不获取锁的情况下完成。
+//
+// 2. 如果mspan没有可用插槽,从mcentral所需大小类的mspan列表中获取一个新的mspan,
+//    其中有可用空间。
+//    获取整个span可以摊销锁定mcentral的成本。
+//
+// 3. 如果mcentral的mspan列表为空,从mheap获取一组页面使用mspan。
+//
+// 4. 如果mheap为空或没有足够大的页面运行,从操作系统分配一组新页面(至少1MB)。
+//    分配大量页面可以摊销与操作系统交谈的成本。
+//
+// 扫描mspan和释放其上的对象按相似的层次结构进行:
+//
+// 1. 如果扫描mspan是响应分配,则将其返回到mcache以满足分配。
+//
+// 2. 否则,如果mspan上仍有已分配的对象,则将其放在mspan大小类的mcentral空闲列表中。
+//
+// 3. 否则,如果mspan上的所有对象都是空闲的,则mspan的页面将返回到mheap,mspan现在已死亡。
+//
+// 分配和释放大对象直接使用mheap,绕过mcache和mcentral。
+//
+// 如果mspan.needzero为false,则mspan中的空闲对象插槽已经清零。否则,如果needzero为true,
+// 则在分配时将对象清零。这种延迟清零方式有各种好处:
+//
+// 1. 栈帧分配可以完全避免清零。
+//
+// 2. 它表现出更好的时间局部性,因为程序可能刚刚写入内存。
+//
+// 3. 我们不会清零永远不会重用的页面。
+//
+// 虚拟内存布局
+//
+// 堆由一组体育馆组成,在64位上为64MB,在32位上为4MB(heapArenaBytes)。
+// 每个竞技场的起始地址也与竞技场大小对齐。
+//
+// 每个竞技场都有一个相关的heapArena对象,用于存储该竞技场的元数据:
+// 竞技场中所有字的堆位图和竞技场中所有页面的span映射。
+
 // Memory allocator.
 //
 // This was originally based on tcmalloc, but has diverged quite a bit.

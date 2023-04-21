@@ -10,7 +10,7 @@
 // 小的分配尺寸(高达32kB)四舍五入到约70个大小类之一,
 // 每个大小类都有完全相同大小的自由对象集。
 // 任何自由页内存都可以划分为一组指定大小类的对象,
-// 然后使用自由位图管理。
+// 然后使用自由bitmap管理。
 //
 // 分配器的数据结构是:
 //
@@ -24,7 +24,7 @@
 // 分配一个小对象要遍历一系列缓存:
 //
 // 1. 将大小四舍五入到小大小类之一,并在此P的mcache中查找对应的mspan。
-//    扫描mspan的自由位图以查找自由插槽。
+//    扫描mspan的自由bitmap以查找自由插槽。
 //    如果有可用插槽,分配它。
 //    所有这些都可以在不获取锁的情况下完成。
 //
@@ -59,10 +59,10 @@
 // 虚拟内存布局
 //
 // 堆由一组体育馆组成,在64位上为64MB,在32位上为4MB(heapArenaBytes)。
-// 每个竞技场的起始地址也与竞技场大小对齐。
+// 每个Arena的起始地址也与Arena大小对齐。
 //
-// 每个竞技场都有一个相关的heapArena对象,用于存储该竞技场的元数据:
-// 竞技场中所有字的堆位图和竞技场中所有页面的span映射。
+// 每个Arena都有一个相关的heapArena对象,用于存储该Arena的元数据:
+// Arena中所有字的堆bitmap和Arena中所有页面的span映射。
 
 // Memory allocator.
 //
@@ -981,6 +981,7 @@ func mallocgc(size uintptr, typ *_type, needzero bool) unsafe.Pointer {
 
 	shouldhelpgc := false
 	dataSize := userSize
+	// p里面的cache
 	c := getMCache(mp)
 	if c == nil {
 		throw("mallocgc called without a P or outside bootstrapping")
@@ -1261,6 +1262,7 @@ func memclrNoHeapPointersChunked(size uintptr, x unsafe.Pointer) {
 // compiler (both frontend and SSA backend) knows the signature
 // of this function
 func newobject(typ *_type) unsafe.Pointer {
+	// new函数实现
 	return mallocgc(typ.size, typ, true)
 }
 

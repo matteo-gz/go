@@ -4,6 +4,175 @@
         <option name="bookmarks">
           <BookmarkState>
             <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/malloc.go" />
+              <entry key="line" value="984" />
+            </attributes>
+            <option name="description" value="c := getMCache(mp)" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/stubs.go" />
+              <entry key="line" value="23" />
+            </attributes>
+            <option name="description" value="获取当前线程的g-getg" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+        </option>
+        <option name="name" value="mem" />
+      </GroupState>
+      <GroupState>
+        <option name="bookmarks">
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/runtime2.go" />
+              <entry key="line" value="545" />
+            </attributes>
+            <option name="description" value="p             puintptr // attached p for executing go code (nil if not executing go code)" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/runtime2.go" />
+              <entry key="line" value="543" />
+            </attributes>
+            <option name="description" value="curg          *g       // current running goroutine" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/runtime2.go" />
+              <entry key="line" value="425" />
+            </attributes>
+            <option name="description" value="m         *m      // current m; offset known to arm liblink" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+        </option>
+        <option name="name" value="tls-val" />
+      </GroupState>
+      <GroupState>
+        <option name="bookmarks">
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/runtime2.go" />
+              <entry key="line" value="1110" />
+            </attributes>
+            <option name="description" value="allm       *m" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/mgcpacer.go" />
+              <entry key="line" value="95" />
+            </attributes>
+            <option name="description" value="var gcController gcControllerState" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/panic.go" />
+              <entry key="line" value="1083" />
+            </attributes>
+            <option name="description" value="var panicking uint32" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/mheap.go" />
+              <entry key="line" value="215" />
+            </attributes>
+            <option name="description" value="mheap_" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/proc.go" />
+              <entry key="line" value="514" />
+            </attributes>
+            <option name="description" value="allgs" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/runtime2.go" />
+              <entry key="line" value="1122" />
+            </attributes>
+            <option name="description" value="allp []*p" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+        </option>
+        <option name="name" value="global-var" />
+      </GroupState>
+      <GroupState>
+        <option name="bookmarks">
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/runtime2.go" />
+              <entry key="line" value="352" />
+            </attributes>
+            <option name="description" value="type sudog struct {" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+        </option>
+        <option name="name" value="chan" />
+      </GroupState>
+      <GroupState>
+        <option name="bookmarks">
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/proc.go" />
+              <entry key="line" value="1431" />
+            </attributes>
+            <option name="description" value="schedule()" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/proc.go" />
+              <entry key="line" value="2095" />
+            </attributes>
+            <option name="description" value="newm-创建m" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/proc.go" />
+              <entry key="line" value="575" />
+            </attributes>
+            <option name="description" value="forEachG-g列表遍历" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/proc.go" />
+              <entry key="line" value="3523" />
+            </attributes>
+            <option name="description" value="gfput(_p_, gp)" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/proc.go" />
+              <entry key="line" value="4122" />
+            </attributes>
+            <option name="description" value="newg = malg(_StackMin)" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/proc.go" />
+              <entry key="line" value="4097" />
+            </attributes>
+            <option name="description" value="newproc1-创建新g" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+        </option>
+        <option name="name" value="runtime" />
+      </GroupState>
+      <GroupState>
+        <option name="bookmarks">
+          <BookmarkState>
+            <attributes>
               <entry key="url" value="file://$PROJECT_DIR$/src/runtime/panic.go" />
               <entry key="line" value="269" />
             </attributes>

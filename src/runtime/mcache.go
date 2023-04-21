@@ -35,12 +35,12 @@ type mcache struct {
 	//
 	// tinyAllocs is the number of tiny allocations performed
 	// by the P that owns this mcache.
-	tiny       uintptr
+	tiny       uintptr // noscan类型的tiny内存 小于16B
 	tinyoffset uintptr
 	tinyAllocs uintptr
 
 	// The rest is not accessed on every malloc.
-
+	// 多个*mspan
 	alloc [numSpanClasses]*mspan // spans to allocate from, indexed by spanClass
 
 	stackcache [_NumStackOrders]stackfreelist

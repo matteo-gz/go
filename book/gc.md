@@ -38,16 +38,78 @@
 ## 内存布局
 [图解 Go 语言内存分配](https://qcrao.com/post/graphic-go-memory-allocation/)
 
-内存多级管理,降低锁粒度
 
 线程内存池,全局内存池
 
 > src/runtime/malloc.go
 
-起源是tcmalloc
+### heap组成
+
+堆内存由多个arena组成
+arenaBaseOffset是arena的起始地址
+
+arena包含多个page,每个page大小为8KB
+
+内存多级管理,降低锁粒度。算法起源是tcmalloc(内存碎片避免，需要将内存划分为多个规格)
+
+arena划分多个块(`span`),不同规格的内存块放入链表中,规格有`_NumSizeClasses`种预置
+
+> src/runtime/sizeclasses.go
+
+详情看 `class_to_size`
+```
+heap=[[arena][arena][arena][...]]
+arena=[[span][span]...]
+span=[[page][page]...]
+page=[[内存块][内存块]...]
+```
+
+### heap结构体
+
+`mheap` 管理整个堆内存
+
+`arena`为`headArena`
+
+`span`为`mspan`
+
+p.mcache 不用加锁
+
+### local p需要mspan时
+```
 
 
+p.mcache.alloc查找
 
+如果没有 或者用完了
+
+就去mcentral这里获取一个mspan,
+假设为 *mspan=p.mcache.alloc[x]
+
+mcentral{
+    partical [][]
+    full     []
+}
+
+partical里的取出一个 与 p.mcache.alloc[x] 与之交换
+
+after:
+
+mcentral{
+partical []
+full     []
+}
+
+*mspan=mcentral.partical[new]
+
+将 p.mcache.alloc[x]  之前用完的 放入 full
+
+final:
+
+mcentral{
+partical []
+full     [][]
+}
+```
 ### TLS变量
 
 Thread Local Storage

@@ -38,8 +38,11 @@ type mcentral struct {
 	// to the appropriate swept list. As a result, the parts of the
 	// sweeper and mcentral that do consume from the unswept list may
 	// encounter swept spans, and these should be ignored.
+	// 未用尽
 	partial [2]spanSet // list of spans with a free object
-	full    [2]spanSet // list of spans with no free objects
+	// 已用尽
+	full [2]spanSet // list of spans with no free objects
+	// [2]spanSet 已清扫和未清扫的
 }
 
 // Initialize a single central free list.

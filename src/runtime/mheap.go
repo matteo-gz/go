@@ -192,14 +192,18 @@ type mheap struct {
 
 	_ uint32 // ensure 64-bit alignment of central
 
+	// 全局的mspan管理 长度为numSpanClasses=136的数组
+
 	// central free lists for small size classes.
 	// the padding makes sure that the mcentrals are
 	// spaced CacheLinePadSize bytes apart, so that each mcentral.lock
 	// gets its own cache line.
 	// central is indexed by spanClass.
 	central [numSpanClasses]struct {
-		mcentral mcentral
-		pad      [cpu.CacheLinePadSize - unsafe.Sizeof(mcentral{})%cpu.CacheLinePadSize]byte
+		mcentral mcentral // 对应一个mspan规格类型 .spanClass
+
+		// 填充
+		pad [cpu.CacheLinePadSize - unsafe.Sizeof(mcentral{})%cpu.CacheLinePadSize]byte
 	}
 
 	spanalloc             fixalloc // allocator for span*
@@ -523,6 +527,14 @@ func recordspan(vh unsafe.Pointer, p unsafe.Pointer) {
 	h.allspans = h.allspans[:len(h.allspans)+1]
 	h.allspans[len(h.allspans)-1] = s
 }
+
+// 高7位:内存块大小规格编号
+// 0, >32KB
+// 1-67 [8B,32KB]
+// 最低位:是否GC
+//  0 scannable
+//  1 noscan（不含指针）
+// 组合下来位68x2=136
 
 // A spanClass represents the size class and noscan-ness of a span.
 //

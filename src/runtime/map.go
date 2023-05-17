@@ -133,11 +133,14 @@ const (
 	evacuatedY     = 3 // same as above, but evacuated to second half of larger table.
 	evacuatedEmpty = 4 // cell is empty, bucket is evacuated.
 	minTopHash     = 5 // minimum tophash for a normal filled cell.
-
 	// flags
-	iterator     = 1 // there may be an iterator using buckets
-	oldIterator  = 2 // there may be an iterator using oldbuckets
-	hashWriting  = 4 // a goroutine is writing to the map
+	// 1
+	iterator = 1 // there may be an iterator using buckets
+	// 10
+	oldIterator = 2 // there may be an iterator using oldbuckets
+	// 100
+	hashWriting = 4 // a goroutine is writing to the map
+	// 1000
 	sameSizeGrow = 8 // the current map growth is to a new map of the same size
 
 	// sentinel bucket ID for iterator checks
@@ -469,7 +472,7 @@ func mapaccess1(t *maptype, h *hmap, key unsafe.Pointer) unsafe.Pointer {
 		fatal("concurrent map read and map write")
 	}
 	hash := t.hasher(key, uintptr(h.hash0))
-	// 桶序号
+	// 桶序号 //掩码操作
 	m := bucketMask(h.B)
 	b := (*bmap)(add(h.buckets, (hash&m)*uintptr(t.bucketsize)))
 	if c := h.oldbuckets; c != nil {
@@ -668,7 +671,7 @@ again:
 	}
 	b := (*bmap)(add(h.buckets, bucket*uintptr(t.bucketsize)))
 	top := tophash(hash)
-
+	// 定位 写入位置
 	var inserti *uint8
 	var insertk unsafe.Pointer
 	var elem unsafe.Pointer
@@ -901,7 +904,7 @@ func mapiterinit(t *maptype, h *hmap, it *hiter) {
 		it.overflow = h.extra.overflow
 		it.oldoverflow = h.extra.oldoverflow
 	}
-
+	// 随机起始
 	// decide where to start
 	var r uintptr
 	if h.B > 31-bucketCntBits {
@@ -943,6 +946,7 @@ next:
 	if b == nil {
 		if bucket == it.startBucket && it.wrapped {
 			// end of iteration
+			// 迭代终点
 			it.key = nil
 			it.elem = nil
 			return
@@ -1106,9 +1110,11 @@ func hashGrow(t *maptype, h *hmap) {
 	// so keep the same number of buckets and "grow" laterally.
 	bigger := uint8(1)
 	if !overLoadFactor(h.count+1, h.B) {
+		// 溢出桶过多 等量搬迁新的
 		bigger = 0
 		h.flags |= sameSizeGrow
 	}
+	// 负载因子超了 x2 扩容
 	oldbuckets := h.buckets
 
 	// 创建一组新桶和预创建的溢出桶，

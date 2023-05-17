@@ -9,7 +9,7 @@
 >
 > video [KylinLabs/Map长啥样儿](https://www.bilibili.com/video/BV1Sp4y1U7dJ/)
 
-
+是指针
 
 > src/runtime/map.go
 
@@ -274,9 +274,39 @@ return walkAssignMapRead(init, n) // `mapaccess2` src/runtime/map.go
 ```
 用于选择桶序号的是哈希的最低几位，而用于加速访问的是哈希的高 8 位，这种设计能够减少同一个桶中有大量相等 tophash 的概率影响性能
 
+## key定位
+top hash,
+尾号 B
+func mapaccess1
+
+## 遍历
+
+before:
+B:1
+bucket:0 1 
+
+after:
+B:2
+
+1->1 3 已经搬迁
+0->0 2 未搬迁
+
+bucket:0 1 2 3 
+oldBucket:1 0
+
+if 
+startBucket:3
+offset:2
+
+start: 3.2
+bucket route: new.3 old.0 new.1 old.2
+
+> map 遍历的核心在于理解 2 倍扩容时，老 bucket 会分裂到 2 个新 bucket 中去。而遍历操作，会按照新 bucket 的序号顺序进行，碰到老 bucket 未搬迁的情况时，要在老 bucket 中找到将来要搬迁到新 bucket 来的 key
+
 ## 写入
 
 `mapassign`
+[insertI][insertK]
 
 ## 删除
 `mapdelete`

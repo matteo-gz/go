@@ -10,13 +10,20 @@
 
 [slice](./book/slice.md)
 [map](./book/map.md)
+[chan](./book/chan.md)
+[select](./book/select.md)
 
 [设计模式](./book/design-patterns.md)
+
+[数据结构](./book/dataStruct.md)
 
 [defer](./book/defer.md)
 
 [gc](./book/gc.md)
 
+### other
+[go 跨平台](./book/arch.md)
+[promtheus](./book/promtheus.md)
 
 
 

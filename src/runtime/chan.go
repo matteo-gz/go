@@ -203,6 +203,7 @@ func chansend(c *hchan, ep unsafe.Pointer, block bool, callerpc uintptr) bool {
 
 	if c.closed != 0 {
 		unlock(&c.lock)
+		// 向关闭chan发送
 		panic(plainError("send on closed channel"))
 	}
 
@@ -356,12 +357,14 @@ func recvDirect(t *_type, sg *sudog, dst unsafe.Pointer) {
 
 func closechan(c *hchan) {
 	if c == nil {
+		// 关闭nil chan
 		panic(plainError("close of nil channel"))
 	}
 
 	lock(&c.lock)
 	if c.closed != 0 {
 		unlock(&c.lock)
+		// 关闭已关闭 chan
 		panic(plainError("close of closed channel"))
 	}
 

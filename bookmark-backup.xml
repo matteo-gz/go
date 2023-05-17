@@ -4,6 +4,62 @@
         <option name="bookmarks">
           <BookmarkState>
             <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/mheap.go" />
+              <entry key="line" value="225" />
+            </attributes>
+            <option name="description" value="heapArena" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/mcache.go" />
+              <entry key="line" value="43" />
+            </attributes>
+            <option name="description" value="alloc [numSpanClasses]*mspan // spans to allocate from, indexed by spanClass" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/mcentral.go" />
+              <entry key="line" value="20" />
+            </attributes>
+            <option name="description" value="spanclass spanClass" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/mheap.go" />
+              <entry key="line" value="202" />
+            </attributes>
+            <option name="description" value="mcentral mcentral // 对应一个mspan规格类型 .spanClass" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/mheap.go" />
+              <entry key="line" value="61" />
+            </attributes>
+            <option name="description" value="type mheap struct {" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/mheap.go" />
+              <entry key="line" value="380" />
+            </attributes>
+            <option name="description" value="type mspan struct {" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/sizeclasses.go" />
+              <entry key="line" value="88" />
+            </attributes>
+            <option name="description" value="_NumSizeClasses = 68" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
               <entry key="url" value="file://$PROJECT_DIR$/src/runtime/malloc.go" />
               <entry key="line" value="984" />
             </attributes>
@@ -48,7 +104,7 @@
             <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
           </BookmarkState>
         </option>
-        <option name="name" value="tls-val" />
+        <option name="name" value="tls-var" />
       </GroupState>
       <GroupState>
         <option name="bookmarks">
@@ -79,7 +135,7 @@
           <BookmarkState>
             <attributes>
               <entry key="url" value="file://$PROJECT_DIR$/src/runtime/mheap.go" />
-              <entry key="line" value="215" />
+              <entry key="line" value="219" />
             </attributes>
             <option name="description" value="mheap_" />
             <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
@@ -105,6 +161,38 @@
       </GroupState>
       <GroupState>
         <option name="bookmarks">
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/chan.go" />
+              <entry key="line" value="205" />
+            </attributes>
+            <option name="description" value="// 向关闭chan发送" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/chan.go" />
+              <entry key="line" value="359" />
+            </attributes>
+            <option name="description" value="// 关闭nil chan" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/chan.go" />
+              <entry key="line" value="366" />
+            </attributes>
+            <option name="description" value="// 关闭已关闭 chan" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/chan.go" />
+              <entry key="line" value="32" />
+            </attributes>
+            <option name="description" value="type hchan struct {" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
           <BookmarkState>
             <attributes>
               <entry key="url" value="file://$PROJECT_DIR$/src/runtime/runtime2.go" />
@@ -187,6 +275,14 @@
           <BookmarkState>
             <attributes>
               <entry key="url" value="file://$PROJECT_DIR$/src/runtime/slice.go" />
+              <entry key="line" value="177" />
+            </attributes>
+            <option name="description" value="growslice" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/slice.go" />
               <entry key="line" value="14" />
             </attributes>
             <option name="description" value="type slice" />
@@ -200,7 +296,23 @@
           <BookmarkState>
             <attributes>
               <entry key="url" value="file://$PROJECT_DIR$/src/runtime/map.go" />
-              <entry key="line" value="1241" />
+              <entry key="line" value="878" />
+            </attributes>
+            <option name="description" value="mapiternext-遍历" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/map.go" />
+              <entry key="line" value="242" />
+            </attributes>
+            <option name="description" value="evacuated-检查是否扩容" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/map.go" />
+              <entry key="line" value="1247" />
             </attributes>
             <option name="description" value="扩容上下文-evacDst" />
             <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
@@ -208,7 +320,7 @@
           <BookmarkState>
             <attributes>
               <entry key="url" value="file://$PROJECT_DIR$/src/runtime/map.go" />
-              <entry key="line" value="1201" />
+              <entry key="line" value="1207" />
             </attributes>
             <option name="description" value="数据迁移-evacuate" />
             <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
@@ -216,7 +328,7 @@
           <BookmarkState>
             <attributes>
               <entry key="url" value="file://$PROJECT_DIR$/src/runtime/map.go" />
-              <entry key="line" value="666" />
+              <entry key="line" value="669" />
             </attributes>
             <option name="description" value="mapassign-growWork" />
             <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
@@ -224,7 +336,7 @@
           <BookmarkState>
             <attributes>
               <entry key="url" value="file://$PROJECT_DIR$/src/runtime/map.go" />
-              <entry key="line" value="717" />
+              <entry key="line" value="720" />
             </attributes>
             <option name="description" value="扩容入口-mapassign-hashGrow" />
             <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
@@ -232,7 +344,7 @@
           <BookmarkState>
             <attributes>
               <entry key="url" value="file://$PROJECT_DIR$/src/runtime/map.go" />
-              <entry key="line" value="1176" />
+              <entry key="line" value="1182" />
             </attributes>
             <option name="description" value="sameSizeGrow" />
             <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
@@ -240,7 +352,7 @@
           <BookmarkState>
             <attributes>
               <entry key="url" value="file://$PROJECT_DIR$/src/runtime/map.go" />
-              <entry key="line" value="755" />
+              <entry key="line" value="758" />
             </attributes>
             <option name="description" value="mapdelete" />
             <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
@@ -248,7 +360,7 @@
           <BookmarkState>
             <attributes>
               <entry key="url" value="file://$PROJECT_DIR$/src/runtime/map.go" />
-              <entry key="line" value="633" />
+              <entry key="line" value="636" />
             </attributes>
             <option name="description" value="mapassign 写入" />
             <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
@@ -256,7 +368,7 @@
           <BookmarkState>
             <attributes>
               <entry key="url" value="file://$PROJECT_DIR$/src/runtime/map.go" />
-              <entry key="line" value="186" />
+              <entry key="line" value="189" />
             </attributes>
             <option name="description" value="type bmap" />
             <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
@@ -264,7 +376,7 @@
           <BookmarkState>
             <attributes>
               <entry key="url" value="file://$PROJECT_DIR$/src/runtime/map.go" />
-              <entry key="line" value="169" />
+              <entry key="line" value="172" />
             </attributes>
             <option name="description" value="type mapextra" />
             <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
@@ -272,7 +384,7 @@
           <BookmarkState>
             <attributes>
               <entry key="url" value="file://$PROJECT_DIR$/src/runtime/map.go" />
-              <entry key="line" value="152" />
+              <entry key="line" value="155" />
             </attributes>
             <option name="description" value="type hmap" />
             <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
@@ -287,7 +399,7 @@
           <BookmarkState>
             <attributes>
               <entry key="url" value="file://$PROJECT_DIR$/src/runtime/map.go" />
-              <entry key="line" value="448" />
+              <entry key="line" value="451" />
             </attributes>
             <option name="description" value="func mapaccess1" />
             <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />

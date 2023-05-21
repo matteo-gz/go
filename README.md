@@ -13,6 +13,8 @@
 [chan](./book/chan.md)
 [select](./book/select.md)
 
+[interface](./book/interface.md)
+
 [设计模式](./book/design-patterns.md)
 
 [数据结构](./book/dataStruct.md)

@@ -70,6 +70,7 @@ func makechan64(t *chantype, size int64) *hchan {
 }
 
 func makechan(t *chantype, size int) *hchan {
+	// 创建chan
 	elem := t.elem
 
 	// compiler checks this but be safe.

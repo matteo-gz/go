@@ -4,6 +4,27 @@
         <option name="bookmarks">
           <BookmarkState>
             <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/runtime2.go" />
+              <entry key="line" value="206" />
+            </attributes>
+            <option name="description" value="type eface struct {" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/runtime2.go" />
+              <entry key="line" value="201" />
+            </attributes>
+            <option name="description" value="type iface struct {" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+        </option>
+        <option name="name" value="interface" />
+      </GroupState>
+      <GroupState>
+        <option name="bookmarks">
+          <BookmarkState>
+            <attributes>
               <entry key="url" value="file://$PROJECT_DIR$/src/runtime/mheap.go" />
               <entry key="line" value="225" />
             </attributes>
@@ -163,8 +184,40 @@
         <option name="bookmarks">
           <BookmarkState>
             <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/select.go" />
+              <entry key="line" value="121" />
+            </attributes>
+            <option name="description" value="func selectgo(cas0 *scase, order0 *uint16, pc0 *uintptr, nsends, nrecvs int, block bool) (int, bool) {" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
               <entry key="url" value="file://$PROJECT_DIR$/src/runtime/chan.go" />
-              <entry key="line" value="205" />
+              <entry key="line" value="460" />
+            </attributes>
+            <option name="description" value="func chanrecv(c *hchan, ep unsafe.Pointer, block bool) (selected, received bool) {" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/chan.go" />
+              <entry key="line" value="160" />
+            </attributes>
+            <option name="description" value="func chansend(c *hchan, ep unsafe.Pointer, block bool, callerpc uintptr) bool {" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/chan.go" />
+              <entry key="line" value="71" />
+            </attributes>
+            <option name="description" value="func makechan(t *chantype, size int) *hchan {" />
+            <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
+          </BookmarkState>
+          <BookmarkState>
+            <attributes>
+              <entry key="url" value="file://$PROJECT_DIR$/src/runtime/chan.go" />
+              <entry key="line" value="206" />
             </attributes>
             <option name="description" value="// 向关闭chan发送" />
             <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
@@ -172,7 +225,7 @@
           <BookmarkState>
             <attributes>
               <entry key="url" value="file://$PROJECT_DIR$/src/runtime/chan.go" />
-              <entry key="line" value="359" />
+              <entry key="line" value="360" />
             </attributes>
             <option name="description" value="// 关闭nil chan" />
             <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
@@ -180,7 +233,7 @@
           <BookmarkState>
             <attributes>
               <entry key="url" value="file://$PROJECT_DIR$/src/runtime/chan.go" />
-              <entry key="line" value="366" />
+              <entry key="line" value="367" />
             </attributes>
             <option name="description" value="// 关闭已关闭 chan" />
             <option name="provider" value="com.intellij.ide.bookmark.providers.LineBookmarkProvider" />
